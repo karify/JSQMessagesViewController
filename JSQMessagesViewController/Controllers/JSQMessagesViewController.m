@@ -178,11 +178,9 @@ static void JSQInstallWorkaroundForSheetPresentationIssue26295020(void) {
 
     self.additionalContentInset = UIEdgeInsetsZero;
 
-    [self jsq_updateCollectionViewInsets];
+    [self jsq_addSafeAreaConstaints];
 
-    if (@available(iOS 11.0, *)) {
-        [self jsq_addSafeAreaConstaints];
-    }
+    [self jsq_updateCollectionViewInsets];
 }
 
 - (void)dealloc
@@ -868,18 +866,14 @@ static void JSQInstallWorkaroundForSheetPresentationIssue26295020(void) {
 
 - (void)jsq_addSafeAreaConstaints
 {
-    NSLayoutConstraint *leadingAnchorConstraint = [[self.collectionView leadingAnchor] constraintEqualToAnchor: [[self.view safeAreaLayoutGuide] leadingAnchor]];
-    NSLayoutConstraint *trailingAnchorConstraint = [[self.collectionView trailingAnchor] constraintEqualToAnchor: [[self.view safeAreaLayoutGuide] trailingAnchor]];
-    NSLayoutConstraint *topAnchorConstraint = [[self.collectionView topAnchor] constraintEqualToAnchor: [[self.view safeAreaLayoutGuide] topAnchor]];
-    NSLayoutConstraint *bottomAnchorConstraint = [[self.collectionView bottomAnchor] constraintEqualToAnchor: [[self.view safeAreaLayoutGuide] bottomAnchor]];
-
-    NSMutableArray *constraints = [[NSMutableArray alloc] initWithCapacity: 4];
-    [constraints addObject:leadingAnchorConstraint];
-    [constraints addObject:trailingAnchorConstraint];
-    [constraints addObject:topAnchorConstraint];
-    [constraints addObject:bottomAnchorConstraint];
-
-    [NSLayoutConstraint activateConstraints: constraints];
+    if (@available(iOS 11.0, *)) {
+        NSLayoutConstraint *leadingAnchorConstraint = [[self.collectionView leadingAnchor] constraintEqualToAnchor: [[self.view safeAreaLayoutGuide] leadingAnchor]];
+        NSLayoutConstraint *trailingAnchorConstraint = [[self.collectionView trailingAnchor] constraintEqualToAnchor: [[self.view safeAreaLayoutGuide] trailingAnchor]];
+        NSLayoutConstraint *topAnchorConstraint = [[self.collectionView topAnchor] constraintEqualToAnchor: [[self.view safeAreaLayoutGuide] topAnchor]];
+        NSLayoutConstraint *bottomAnchorConstraint = [[self.collectionView bottomAnchor] constraintEqualToAnchor: [[self.view safeAreaLayoutGuide] bottomAnchor]];
+        NSMutableArray *constraints = [[NSMutableArray alloc] initWithObjects:leadingAnchorConstraint, trailingAnchorConstraint, topAnchorConstraint, bottomAnchorConstraint, nil];
+        [NSLayoutConstraint activateConstraints: constraints];
+    }
 }
 
 - (void)jsq_updateCollectionViewInsets
