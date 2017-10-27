@@ -112,9 +112,8 @@ static void JSQInstallWorkaroundForSheetPresentationIssue26295020(void) {
 
 @property (weak, nonatomic) IBOutlet JSQMessagesCollectionView *collectionView;
 @property (strong, nonatomic) IBOutlet JSQMessagesInputToolbar *inputToolbar;
-
+@property (strong, nonatomic) UIView *backgroundView;
 @property (nonatomic) NSLayoutConstraint *toolbarHeightConstraint;
-
 @property (strong, nonatomic) NSIndexPath *selectedIndexPathForMenu;
 
 @end
@@ -179,7 +178,6 @@ static void JSQInstallWorkaroundForSheetPresentationIssue26295020(void) {
     self.additionalContentInset = UIEdgeInsetsZero;
 
     [self jsq_addSafeAreaConstaints];
-
     [self jsq_updateCollectionViewInsets];
 }
 
@@ -240,6 +238,10 @@ static void JSQInstallWorkaroundForSheetPresentationIssue26295020(void) {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    UIColor *backgroundColor = [[UIColor alloc]initWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0];
+    UIColor *borderColor = [[UIColor alloc]initWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255 alpha:1.0];
+    [self jsq_addSafeAreaToolbarBackgroundWithBackgroundColor:backgroundColor andBorderColor:borderColor];
+    
     if (!self.inputToolbar.contentView.textView.hasText) {
         self.toolbarHeightConstraint.constant = self.inputToolbar.preferredDefaultHeight;
     }
@@ -304,6 +306,11 @@ static void JSQInstallWorkaroundForSheetPresentationIssue26295020(void) {
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [self jsq_resetLayoutAndCaches];
+}
+
+- (void)viewWillLayoutSubviews {
+    [self jsq_updateSafeAreaToolbarBackground];
+    [super viewWillLayoutSubviews];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -873,6 +880,25 @@ static void JSQInstallWorkaroundForSheetPresentationIssue26295020(void) {
         NSLayoutConstraint *bottomAnchorConstraint = [[self.collectionView bottomAnchor] constraintEqualToAnchor: [[self.view safeAreaLayoutGuide] bottomAnchor]];
         NSMutableArray *constraints = [[NSMutableArray alloc] initWithObjects:leadingAnchorConstraint, trailingAnchorConstraint, topAnchorConstraint, bottomAnchorConstraint, nil];
         [NSLayoutConstraint activateConstraints: constraints];
+    }
+}
+
+- (void)jsq_updateSafeAreaToolbarBackground {
+    [self.backgroundView setFrame:CGRectMake(-44, 0, self.view.frame.size.width + 44, self.inputToolbar.frame.size.height + self.view.frame.size.height / 2)];
+}
+
+- (void)jsq_addSafeAreaToolbarBackgroundWithBackgroundColor:(UIColor *)background andBorderColor:(UIColor *)border
+{
+    if (@available(iOS 11.0, *)) {
+        self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(-44, 0, self.view.frame.size.width + 44, self.inputToolbar.frame.size.height + self.view.frame.size.height / 2)];
+        [self.backgroundView setBackgroundColor:[[UIColor alloc]initWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0]];
+        [self.backgroundView.layer setBorderColor:[[UIColor alloc]initWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255 alpha:1.0].CGColor];
+        [self.backgroundView.layer setBorderWidth:1.0];
+        [self.inputToolbar addSubview:self.backgroundView];
+        [self.inputToolbar sendSubviewToBack:self.backgroundView];
+        [self.inputToolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
+        NSLayoutConstraint *topAnchorConstraint = [[self.backgroundView topAnchor] constraintEqualToAnchor:self.inputToolbar.topAnchor constant:1.0];
+        [topAnchorConstraint setActive:TRUE];
     }
 }
 
