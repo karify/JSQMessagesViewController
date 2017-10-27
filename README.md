@@ -1,4 +1,4 @@
-# Fork of [JSQMessagesViewController](https://github.com/jessesquires/JSQMessagesViewController) [Depricated] to include support for (iphone x) safe area
+# Fork of [JSQMessagesViewController](https://github.com/jessesquires/JSQMessagesViewController) [Deprecated] to include support for (iphone x) safe area
 
 
 ## Changelog
