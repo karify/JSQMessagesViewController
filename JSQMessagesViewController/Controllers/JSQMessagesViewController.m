@@ -890,6 +890,10 @@ static void JSQInstallWorkaroundForSheetPresentationIssue26295020(void) {
 - (void)jsq_addSafeAreaToolbarBackgroundWithBackgroundColor:(UIColor *)background andBorderColor:(UIColor *)border
 {
     if (@available(iOS 11.0, *)) {
+        if (self.backgroundView != nil) {
+            return;
+        }
+
         self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(-44, 0, self.view.frame.size.width + 44, self.inputToolbar.frame.size.height + self.view.frame.size.height / 2)];
         [self.backgroundView setBackgroundColor:[[UIColor alloc]initWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0]];
         [self.backgroundView.layer setBorderColor:[[UIColor alloc]initWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255 alpha:1.0].CGColor];
