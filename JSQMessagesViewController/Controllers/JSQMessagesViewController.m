@@ -880,6 +880,13 @@ static void JSQInstallWorkaroundForSheetPresentationIssue26295020(void) {
         NSLayoutConstraint *bottomAnchorConstraint = [[self.collectionView bottomAnchor] constraintEqualToAnchor: [[self.view safeAreaLayoutGuide] bottomAnchor]];
         NSMutableArray *constraints = [[NSMutableArray alloc] initWithObjects:leadingAnchorConstraint, trailingAnchorConstraint, topAnchorConstraint, bottomAnchorConstraint, nil];
         [NSLayoutConstraint activateConstraints: constraints];
+    } else if (@available(iOS 9.0, *)) {
+        NSLayoutConstraint *leadingAnchorConstraint = [[self.collectionView leadingAnchor] constraintEqualToAnchor: [self.view leadingAnchor]];
+        NSLayoutConstraint *trailingAnchorConstraint = [[self.collectionView trailingAnchor] constraintEqualToAnchor: [self.view trailingAnchor]];
+        NSLayoutConstraint *topAnchorConstraint = [[self.collectionView topAnchor] constraintEqualToAnchor: [self.view topAnchor]];
+        NSLayoutConstraint *bottomAnchorConstraint = [[self.collectionView bottomAnchor] constraintEqualToAnchor: [self.view bottomAnchor]];
+        NSMutableArray *constraints = [[NSMutableArray alloc] initWithObjects:leadingAnchorConstraint, trailingAnchorConstraint, topAnchorConstraint, bottomAnchorConstraint, nil];
+        [NSLayoutConstraint activateConstraints: constraints];
     }
 }
 
