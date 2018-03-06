@@ -27,3 +27,11 @@
 "send" = "Stuur";
 
 "new_message" = "Nieuw bericht";
+
+"text_message_accessibility_label" = "%@: %@";
+
+"media_message_accessibility_label" = "%@: media bericht";
+
+"accessory_button_accessibility_label" = "Deel media";
+
+"new_message_received_accessibility_announcement" = "Nieuw bericht ontvangen";
